@@ -1,5 +1,4 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
 const path = require('path');
 
@@ -19,6 +18,9 @@ const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
+
+//start express app
+const app = express();
 
 app.set('view engine', 'pug');
 app.set('views',path.join(__dirname,'views'));
