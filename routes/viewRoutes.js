@@ -11,6 +11,7 @@ router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 router.get('/signup', viewsController.getSignUpForm);
 router.get('/me',authController.protect,viewsController.getAccount);
 router.get('/my-tours',authController.protect,viewsController.getMyTours);
+router.get('/my-tours/:slug',authController.protect,viewsController.getReviewTour);
 // router.get('/submit-user-data',authController.protect,viewsController.updateUserData);
 
 module.exports = router;

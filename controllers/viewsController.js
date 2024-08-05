@@ -34,6 +34,25 @@ exports.getTour = catchAsync(async(req,res,next)=>{
     });
 });
 
+exports.getReviewTour = catchAsync(async(req,res,next)=>{
+    //1) Get data, for the requested tour (including reviews and guides)
+    const tour = await Tour.findOne({slug: req.params.slug}).populate({
+        path: 'reviews',
+        fields: 'review rating user'
+    })
+
+    if(!tour){
+        return next(new AppError('No tour found with that Name',404))
+    }
+    //2) Build Template
+    //3) Render template using data from 1)
+    // console.log(tour);
+    res.status(200).render('review',{
+        title: `review on ${tour.name} tour`,
+        tour
+    });
+});
+
 exports.getLoginForm = (req,res)=>{
     res.status(200).render('login',{
         title: 'Log into your account'
@@ -62,7 +81,7 @@ exports.getMyTours = catchAsync(async(req, res, next) => {
     const tourIds = bookings.map(el => el.tour)
     const tours = await Tour.find({_id: {$in: tourIds}})
 
-    res.status(200).render('overview', {
+    res.status(200).render('myTour', {
         title: 'My tours',
         tours
     })

@@ -1322,3 +1322,23 @@ body {
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
 }
+
+.star-rating {
+  direction: rtl;
+  display: inline-flex;
+}
+.star-rating input[type="radio"] {
+  display: none;
+}
+.star-rating label {
+  font-size: 2rem;
+  color: #ddd;
+  cursor: pointer;
+}
+.star-rating input[type="radio"]:checked ~ label {
+  color: #f5b301;
+}
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #f5b301;
+}

@@ -1,6 +1,7 @@
 import '@babel/polyfill';
 import {displayMap} from './mapbox';    
 import {login,logout} from './login';
+import {review} from './review';
 import {signUp} from './signUp';
 import {updateSettings} from './updateSettings';
 import {bookTour} from './stripe';
@@ -8,6 +9,7 @@ import {bookTour} from './stripe';
 //Dom element
 const mapbox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
+const reviewForm = document.querySelector('.form--review');
 const signUpForm = document.querySelector('.form--signUp');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const updateDataForm = document.querySelector('.form-user-data');
@@ -26,6 +28,15 @@ loginForm.addEventListener('submit', e => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     login(email,password)
+});
+
+if(reviewForm)
+reviewForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const rating = document.querySelector('input[name="rating"]:checked').value;
+    // const rating = document.getElementById('rating').value;
+    const review = document.getElementById('review').value;
+    review(rating, review);
 });
 
 if(signUpForm)
