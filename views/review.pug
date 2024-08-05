@@ -18,6 +18,7 @@ block content
                         label.star(for='2-stars') &starf;
                         input#1-star(type='radio'  name='rating' value='1')
                         label.star(for='1-star') &starf;
+                        input#tourId(type="hidden" name="tourId" value=`${tour.id}`)
                 .form__group
                     .review-text
                         label.form__label(for='review') Review:

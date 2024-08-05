@@ -1,7 +1,7 @@
 import '@babel/polyfill';
 import {displayMap} from './mapbox';    
 import {login,logout} from './login';
-import {review} from './review';
+import {addReview} from './review';
 import {signUp} from './signUp';
 import {updateSettings} from './updateSettings';
 import {bookTour} from './stripe';
@@ -36,7 +36,8 @@ reviewForm.addEventListener('submit', e => {
     const rating = document.querySelector('input[name="rating"]:checked').value;
     // const rating = document.getElementById('rating').value;
     const review = document.getElementById('review').value;
-    review(rating, review);
+    const tourId = document.getElementById('tourId').value;
+    addReview(rating, review, tourId);
 });
 
 if(signUpForm)
