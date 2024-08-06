@@ -12608,7 +12608,7 @@ var signUp = exports.signUp = /*#__PURE__*/function () {
           _context.next = 3;
           return (0, _axios.default)({
             method: 'POST',
-            url: 'http://127.0.0.1:3000/api/v1/users/signup',
+            url: '/api/v1/users/signup',
             data: {
               name: name,
               email: email,
@@ -12640,18 +12640,6 @@ var signUp = exports.signUp = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
-
-// export const logout = async() => {
-//     try{
-//         const res = await axios({
-//             method: 'GET',
-//             url: 'http://127.0.0.1:3000/api/v1/users/logout'
-//         });
-//         if((res.data.status = 'success')) location.reload(true);
-//     }catch(err){
-//         showAlert('error','Error logging out! Try again');
-//     }
-// }
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"updateSettings.js":[function(require,module,exports) {
 "use strict";
 
@@ -13025,7 +13013,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50580" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50005" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
