@@ -5,4 +5,7 @@ include _reviewCard
 block content
     .reviews
         each review in reviews
-            +reviewCard(review)
+            each tour in tours
+                if review.tour.toString() === tour._id.toString()
+                    +reviewCardWithTour(review, tour)
+

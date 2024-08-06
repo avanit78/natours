@@ -74,7 +74,7 @@ block content
     section.section-reviews
         .reviews
             each review in tour.reviews
-                +reviewCard(review)
+                +reviewCardWithoutTour(review)
 
     section.section-cta
         .cta
@@ -85,7 +85,13 @@ block content
             .cta__content
                 h2.heading-secondary What are you waiting for?
                 p.cta__text= `${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
+                //- tour.pug
                 if user
-                    button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+                    - var hasBooking = bookings && bookings.some(booking => booking.tour.id.toString() === tour.id.toString());
+                    if hasBooking
+                        h1 You have already booked this tour.
+                    else
+                        button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
                 else
                     a.btn.btn--green.span-all-rows(href='/login') Log in to book Tour
+

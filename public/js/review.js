@@ -23,3 +23,26 @@ export const addReview = async(rating, review,tourId) => {
         showAlert('error',err.response.data.message);
     }
 }
+
+export const deleteReview = async (reviewId) => {
+    // console.log('deleteReview called with reviewId:', reviewId); // Check if the function is called
+    try {
+        const res = await axios({
+            method: 'DELETE',
+            url: `/api/v1/reviews/${reviewId}`
+        });
+        const status = 'success';
+        // console.log('Response from API:',res.data); // Check the response
+        
+        if (status === 'success') {
+            showAlert('success', 'Review deleted');
+            window.setTimeout(() => {
+                location.assign('/my-reviews');
+            }, 1000);
+        }
+    } catch (err) {
+        console.error(err); // Log the error
+        showAlert('error', err.response.data.message);
+    }
+};
+

@@ -84,11 +84,10 @@ app.use(compression());
 app.use((req, res, next) => {
     res.setHeader(
         "Content-Security-Policy",
-        "script-src 'self' https://cdnjs.cloudflare.com https://api.mapbox.com https://js.stripe.com; style-src 'self' https://api.mapbox.com https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; worker-src 'self' https://api.mapbox.com blob:; connect-src 'self' http://127.0.0.1:3000 ws://127.0.0.1:50102 ws://localhost:* ws://127.0.0.1:50006 https://api.mapbox.com https://events.mapbox.com;"
+        "script-src 'self' https://cdnjs.cloudflare.com https://api.mapbox.com https://js.stripe.com; style-src 'self' https://api.mapbox.com https://fonts.googleapis.com 'unsafe-inline'; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; worker-src 'self' https://api.mapbox.com blob:; connect-src 'self' http://127.0.0.1:3000 ws://127.0.0.1:50102 ws://localhost:* ws://127.0.0.1:50006 ws://127.0.0.1:50026 ws://127.0.0.1:50580 https://api.mapbox.com https://events.mapbox.com;"
     );
     next();
 });
-
 //2) ROUTEHANDLES
 
 

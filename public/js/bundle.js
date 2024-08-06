@@ -12497,7 +12497,7 @@ var logout = exports.logout = /*#__PURE__*/function () {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.addReview = void 0;
+exports.deleteReview = exports.addReview = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 var _alerts = require("./alerts");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
@@ -12544,6 +12544,44 @@ var addReview = exports.addReview = /*#__PURE__*/function () {
   }));
   return function addReview(_x, _x2, _x3) {
     return _ref.apply(this, arguments);
+  };
+}();
+var deleteReview = exports.deleteReview = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(reviewId) {
+    var res, status;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          _context2.prev = 0;
+          _context2.next = 3;
+          return (0, _axios.default)({
+            method: 'DELETE',
+            url: "/api/v1/reviews/".concat(reviewId)
+          });
+        case 3:
+          res = _context2.sent;
+          status = 'success'; // console.log('Response from API:',res.data); // Check the response
+          if (status === 'success') {
+            (0, _alerts.showAlert)('success', 'Review deleted');
+            window.setTimeout(function () {
+              location.assign('/my-reviews');
+            }, 1000);
+          }
+          _context2.next = 12;
+          break;
+        case 8:
+          _context2.prev = 8;
+          _context2.t0 = _context2["catch"](0);
+          console.error(_context2.t0); // Log the error
+          (0, _alerts.showAlert)('error', _context2.t0.response.data.message);
+        case 12:
+        case "end":
+          return _context2.stop();
+      }
+    }, _callee2, null, [[0, 8]]);
+  }));
+  return function deleteReview(_x4) {
+    return _ref2.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"signUp.js":[function(require,module,exports) {
@@ -12867,6 +12905,16 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 var mapbox = document.getElementById('map');
 var loginForm = document.querySelector('.form--login');
 var reviewForm = document.querySelector('.form--review');
+var reviewDelete = document.querySelector('.form--delete');
+
+// Create a new URL object using the current URL
+var currentUrl = new URL(window.location.href);
+
+// Use URLSearchParams to get the query parameters
+var params = new URLSearchParams(currentUrl.search);
+
+// Get the value of the 'reviewIdwithName' parameter
+var reviewIdValue = params.get('reviewIdwithName');
 var signUpForm = document.querySelector('.form--signUp');
 var logoutBtn = document.querySelector('.nav__el--logout');
 var updateDataForm = document.querySelector('.form-user-data');
@@ -12892,6 +12940,10 @@ if (reviewForm) reviewForm.addEventListener('submit', function (e) {
   var tourId = document.getElementById('tourId').value;
   (0, _review.addReview)(rating, review, tourId);
 });
+if (reviewIdValue) {
+  reviewDelete.addEventListener('submit', (0, _review.deleteReview)(reviewIdValue));
+}
+;
 if (signUpForm) signUpForm.addEventListener('submit', function (e) {
   e.preventDefault();
   var name = document.getElementById('name').value;
@@ -12899,15 +12951,6 @@ if (signUpForm) signUpForm.addEventListener('submit', function (e) {
   var password = document.getElementById('password').value;
   var passwordConfirm = document.getElementById('passwordConfirm').value;
   (0, _signUp.signUp)(name, email, password, passwordConfirm);
-
-  // const form = new FormData();
-  // form.append('name', document.getElementById('name').value)
-  // form.append('email', document.getElementById('email').value)
-  // form.append('password', document.getElementById('password').value)
-  // form.append('passwordConfirm', document.getElementById('passwordConfirm').value)
-  // form.append('photo', document.getElementById('photo').files[0])
-
-  // signUp(form)
 });
 if (logoutBtn) logoutBtn.addEventListener('click', _login.logout);
 if (updateDataForm) updateDataForm.addEventListener('submit', function (e) {
@@ -12982,7 +13025,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50006" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50580" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

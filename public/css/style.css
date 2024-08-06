@@ -234,6 +234,12 @@ body {
   background-color: #55c57a;
   color: #fff;
 }
+
+.btn--red {
+  background-color: #aa3d3d;
+  color: #fff;
+}
+
 .btn--green::after {
   background-color: #55c57a;
 }
@@ -652,6 +658,7 @@ body {
   text-transform: uppercase;
 }
 .reviews__text {
+  text-align: center;
   font-size: 1.5rem;
   margin-bottom: 2rem;
   font-style: italic;
@@ -673,6 +680,20 @@ body {
 }
 .reviews__star--inactive {
   fill: #bbb;
+}
+
+.review--delete{
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease
+}
+
+.review--delete:hover {
+  background-color: #c0392b;
 }
 
 .section-cta {

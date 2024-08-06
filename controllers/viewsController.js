@@ -17,21 +17,29 @@ exports.getOverview = catchAsync(async (req,res,next)=>{
     });
 });
 
-exports.getTour = catchAsync(async(req,res,next)=>{
-    //1) Get data, for the requested tour (including reviews and guides)
-    const tour = await Tour.findOne({slug: req.params.slug}).populate({
+exports.getTour = catchAsync(async (req, res, next) => {
+    // 1) Get data, for the requested tour (including reviews and guides)
+    const tour = await Tour.findOne({ slug: req.params.slug }).populate({
         path: 'reviews',
         fields: 'review rating user'
-    })
+    });
 
-    if(!tour){
-        return next(new AppError('No tour found with that Name',404))
+    if (!tour) {
+        return next(new AppError('No tour found with that Name', 404));
     }
-    //2) Build Template
-    //3) Render template using data from 1)
-    res.status(200).render('tour',{
+
+    // 2) Find bookings if user is logged in
+    let bookings = [];
+    if (req.user && req.user.id) {
+        bookings = await Booking.find({
+            user: req.user.id
+        });
+    }
+    // 3) Render template using data from 1) and 2)
+    res.status(200).render('tour', {
         title: `${tour.name} tour`,
-        tour
+        tour,
+        bookings
     });
 });
 
@@ -82,30 +90,31 @@ exports.getMyTours = catchAsync(async(req, res, next) => {
     const tourIds = bookings.map(el => el.tour)
     const tours = await Tour.find({_id: {$in: tourIds}})
 
+    const reviews= await Review.find({
+        tour: {$in: tourIds},
+        user: req.user.id
+    });
+
     res.status(200).render('myTour', {
         title: 'My tours',
-        tours
+        tours,
+        reviews
     })
 })
 
 exports.getMyReviews = catchAsync(async(req, res, next) => {
-    //1) find a bookings
+
     const reviews= await Review.find({
         user: req.user.id
     });
 
-    //2)find tours with the returned Ids
-    // const tourIds = bookings.map(el => el.tour)
-    // const tours = await Tour.find({_id: {$in: tourIds}})
-
-    // res.status(200).render('myTour', {
-    //     title: 'My tours',
-    //     tours
-    // })
+    const tourIds = reviews.map(el => el.tour)
+    const tours = await Tour.find({_id: {$in: tourIds}})
 
     res.status(200).render('myReview',{
         title: 'My Reviews',
-        reviews
+        reviews,
+        tours
     });
 })
 

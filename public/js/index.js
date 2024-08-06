@@ -1,7 +1,7 @@
 import '@babel/polyfill';
 import {displayMap} from './mapbox';    
 import {login,logout} from './login';
-import {addReview} from './review';
+import {addReview, deleteReview} from './review';
 import {signUp} from './signUp';
 import {updateSettings} from './updateSettings';
 import {bookTour} from './stripe';
@@ -10,6 +10,17 @@ import {bookTour} from './stripe';
 const mapbox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const reviewForm = document.querySelector('.form--review');
+const reviewDelete = document.querySelector('.form--delete');
+
+    // Create a new URL object using the current URL
+    const currentUrl = new URL(window.location.href);
+
+    // Use URLSearchParams to get the query parameters
+    const params = new URLSearchParams(currentUrl.search);
+
+    // Get the value of the 'reviewIdwithName' parameter
+    const reviewIdValue = params.get('reviewIdwithName');
+
 const signUpForm = document.querySelector('.form--signUp');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const updateDataForm = document.querySelector('.form-user-data');
@@ -40,6 +51,8 @@ reviewForm.addEventListener('submit', e => {
     addReview(rating, review, tourId);
 });
 
+if(reviewIdValue) {reviewDelete.addEventListener('submit', deleteReview(reviewIdValue))};
+
 if(signUpForm)
 signUpForm.addEventListener('submit', e => {
     e.preventDefault();
@@ -48,15 +61,6 @@ signUpForm.addEventListener('submit', e => {
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('passwordConfirm').value;
     signUp(name,email,password,passwordConfirm)
-
-    // const form = new FormData();
-    // form.append('name', document.getElementById('name').value)
-    // form.append('email', document.getElementById('email').value)
-    // form.append('password', document.getElementById('password').value)
-    // form.append('passwordConfirm', document.getElementById('passwordConfirm').value)
-    // form.append('photo', document.getElementById('photo').files[0])
-
-    // signUp(form)
 });
 
 if(logoutBtn) logoutBtn.addEventListener('click', logout);
