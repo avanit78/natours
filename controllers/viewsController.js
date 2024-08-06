@@ -34,12 +34,16 @@ exports.getTour = catchAsync(async (req, res, next) => {
         bookings = await Booking.find({
             user: req.user.id
         });
+        tourBooked = await Booking.find({
+            tour: tour.id
+        });
     }
     // 3) Render template using data from 1) and 2)
     res.status(200).render('tour', {
         title: `${tour.name} tour`,
         tour,
-        bookings
+        bookings,
+        tourBooked
     });
 });
 
