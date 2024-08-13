@@ -16,7 +16,7 @@ export const addReview = async(rating, review,tourId) => {
         if(res.data.status === 'success'){
             showAlert('success','Review submit');
             window.setTimeout(()=>{
-                location.reload(true)
+                location.assign('/my-reviews');
             },1000)
         }
     }catch(err){
