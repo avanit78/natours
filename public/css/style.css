@@ -1344,6 +1344,10 @@ body {
   transform: translateY(-2px);
 }
 
+.nav__el.nav__el--cta.forgot{
+  color: #007BFF; /* A blue color commonly used for links */
+}
+
 .star-rating {
   direction: rtl;
   display: inline-flex;

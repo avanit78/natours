@@ -1,6 +1,6 @@
 import '@babel/polyfill';
 import {displayMap} from './mapbox';    
-import {login,logout} from './login';
+import {login,logout,forgotPassword,resetPass} from './login';
 import {addReview, deleteReview} from './review';
 import {signUp} from './signUp';
 import {updateSettings} from './updateSettings';
@@ -9,6 +9,7 @@ import {bookTour} from './stripe';
 //Dom element
 const mapbox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
+const resetTokenForm = document.querySelector('.form--resetPassword');
 const reviewForm = document.querySelector('.form--review');
 const reviewDelete = document.querySelector('.form--delete');
 
@@ -25,6 +26,7 @@ const signUpForm = document.querySelector('.form--signUp');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const updateDataForm = document.querySelector('.form-user-data');
 const updatePassForm = document.querySelector('.form-user-password');
+const forgotPass = document.querySelector('.forgot');
 const bookBtn = document.getElementById('book-tour');
 
 //delegation
@@ -39,6 +41,15 @@ loginForm.addEventListener('submit', e => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     login(email,password)
+});
+
+if(resetTokenForm)
+resetTokenForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const token = document.getElementById('token').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    resetPass(token,password,passwordConfirm)
 });
 
 if(reviewForm)
@@ -91,6 +102,12 @@ updatePassForm.addEventListener('submit', async e => {
     document.getElementById('password').value='';
     document.getElementById('password-confirm').value='';
 });
+
+if(forgotPass) forgotPass.addEventListener('click',e => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    forgotPassword(email)
+})
 
 if(bookBtn){
     bookBtn.addEventListener('click', e => {

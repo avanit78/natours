@@ -4,6 +4,7 @@ const Booking = require('./../models/BookingModel');
 const Review = require('./../models/reviewModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('./../utils/appError');
+const APIFeatures = require('./../utils/apiFeatures');
 
 exports.getOverview = catchAsync(async (req,res,next)=>{
     //1) Get tour data from colection
@@ -30,6 +31,7 @@ exports.getTour = catchAsync(async (req, res, next) => {
 
     // 2) Find bookings if user is logged in
     let bookings = [];
+    let tourBooked = [];
     if (req.user && req.user.id) {
         bookings = await Booking.find({
             user: req.user.id
@@ -44,6 +46,23 @@ exports.getTour = catchAsync(async (req, res, next) => {
         tour,
         bookings,
         tourBooked
+    });
+});
+
+exports.getAllTourReview = catchAsync(async (req, res, next) => {
+    // 1) Get data, for the requested tour (including reviews and guides)
+    const tours = await Tour.find().populate({
+        path: 'reviews',
+        fields: 'review rating user'
+    });
+
+    if (!tours) {
+        return next(new AppError('No tour found with that Name', 404));
+    }
+    // 3) Render template using data from 1) and 2)
+    res.status(200).render('allTourReview', {
+        title: `All Tour Review`,
+        tours
     });
 });
 
@@ -69,6 +88,11 @@ exports.getReviewTour = catchAsync(async(req,res,next)=>{
 exports.getLoginForm = (req,res)=>{
     res.status(200).render('login',{
         title: 'Log into your account'
+    })
+};
+exports.getResetPasswordForm = (req,res)=>{
+    res.status(200).render('resetPassword',{
+        title: 'Reset your Password'
     })
 };
 
@@ -120,6 +144,35 @@ exports.getMyReviews = catchAsync(async(req, res, next) => {
         reviews,
         tours
     });
+})
+
+exports.getAllBookedTour = catchAsync(async(req, res) => {
+    const bookings= await Booking.find();
+
+    //2)find tours with the returned Ids
+    const tourIds = bookings.map(el => el.tour)
+    const tours = await Tour.find({_id: {$in: tourIds}})
+
+    const userIds = bookings.map(el => el.user)
+    const users = await User.find({_id: {$in: userIds}})
+
+    res.status(200).render('allBookedTour', {
+        title: 'All Booked Tour',
+        bookings,
+        tours,
+        users
+    })
+})
+
+exports.getAllUser = catchAsync(async(req, res) => {
+    
+    const features = new APIFeatures(User.find(),req.query).filter().sort().limitFields().paginate()
+    const users = await features.query;
+
+    res.status(200).render('allUser', {
+        title: 'All User',
+        users
+    })
 })
 
 // exports.updateUserData = catchAsync(async(req,res,next)=>{

@@ -18,10 +18,10 @@ const createSendToken = (user,statusCode,res)=>{
     const token = signToken(user._id);
     const cookieOption = {
         expires: new Date(Date.now() + process.env.JWT_COOKIES_EXPIRES_IN * 24 * 60 * 60 *1000),
-        secure:true,
+        // secure:true
         httpOnly:true
     };
-    if(process.env.NODE_ENV === 'development') cookieOption.secure=true;
+    // if(process.env.NODE_ENV === 'development') cookieOption.secure=true;
     res.cookie('jwt',token,cookieOption);
     user.password = undefined;
 
@@ -180,13 +180,14 @@ exports.forgotPassword = catchAsync(async(req,res,next) => {
             //     subject: 'Your password reset token (valid for 10 min)',
             //     message
             // });
-        const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+        // const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+        const resetURL = `${resetToken}`;
 
         await new Email(user, resetURL).sendPasswordReset();
     
         res.status(200).json({
             status:'success',
-            message:'Token sent to email!'
+            message:'Token sent to email! Please check it out'
         })
     } catch (err) {
         user.passwordResetToken = undefined;

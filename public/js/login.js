@@ -36,11 +36,51 @@ export const logout = async() => {
             showAlert('success','Logout successfully');
             window.setTimeout(()=>{
                 location.assign('/');
-            },500)  //location.reload(true) we can use
+            },2000)  //location.reload(true) we can use
         };
     }catch(err){
         showAlert('error','Error logging out! Try again');
     }
 } 
 
+export const forgotPassword = async(email) => {
+    try{
+        const res = await axios({
+            method: 'POST',
+            url: '/api/v1/users/forgotPassword',
+            data: {
+                email
+            }
+        });
+        if((res.data.status = 'success')) {
+            showAlert('success',res.data.message);
+            window.setTimeout(()=>{
+                location.assign('/resetPassword');
+            },3000)  //location.reload(true) we can use
+        };
+    }catch(err){
+        showAlert('error',err.response.data.message);
+    }
+} 
+
+export const resetPass = async(token,password,passwordConfirm) => {
+    try{
+        const res = await axios({
+            method: 'PATCH',
+            url: `/api/v1/users/resetPassword/${token}`,
+            data: {
+                password,
+                passwordConfirm
+            }
+        });
+        if((res.data.status = 'success')) {
+            showAlert('success',"Password Reset successfully");
+            window.setTimeout(()=>{
+                location.assign('/');
+            },500)  //location.reload(true) we can use
+        };
+    }catch(err){
+        showAlert('error',err.response.data.message);
+    }
+} 
 

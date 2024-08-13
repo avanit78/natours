@@ -12404,7 +12404,7 @@ var showAlert = exports.showAlert = function showAlert(type, msg) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.logout = exports.login = void 0;
+exports.resetPass = exports.logout = exports.login = exports.forgotPassword = void 0;
 var _axios = _interopRequireDefault(require("axios"));
 var _alerts = require("./alerts");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
@@ -12472,7 +12472,7 @@ var logout = exports.logout = /*#__PURE__*/function () {
             (0, _alerts.showAlert)('success', 'Logout successfully');
             window.setTimeout(function () {
               location.assign('/');
-            }, 500); //location.reload(true) we can use
+            }, 2000); //location.reload(true) we can use
           }
           ;
           _context2.next = 11;
@@ -12489,6 +12489,87 @@ var logout = exports.logout = /*#__PURE__*/function () {
   }));
   return function logout() {
     return _ref2.apply(this, arguments);
+  };
+}();
+var forgotPassword = exports.forgotPassword = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(email) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return (0, _axios.default)({
+            method: 'POST',
+            url: '/api/v1/users/forgotPassword',
+            data: {
+              email: email
+            }
+          });
+        case 3:
+          res = _context3.sent;
+          if (res.data.status = 'success') {
+            (0, _alerts.showAlert)('success', res.data.message);
+            window.setTimeout(function () {
+              location.assign('/resetPassword');
+            }, 3000); //location.reload(true) we can use
+          }
+          ;
+          _context3.next = 11;
+          break;
+        case 8:
+          _context3.prev = 8;
+          _context3.t0 = _context3["catch"](0);
+          (0, _alerts.showAlert)('error', _context3.t0.response.data.message);
+        case 11:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3, null, [[0, 8]]);
+  }));
+  return function forgotPassword(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+var resetPass = exports.resetPass = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(token, password, passwordConfirm) {
+    var res;
+    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          _context4.next = 3;
+          return (0, _axios.default)({
+            method: 'PATCH',
+            url: "/api/v1/users/resetPassword/".concat(token),
+            data: {
+              password: password,
+              passwordConfirm: passwordConfirm
+            }
+          });
+        case 3:
+          res = _context4.sent;
+          if (res.data.status = 'success') {
+            (0, _alerts.showAlert)('success', "Password Reset successfully");
+            window.setTimeout(function () {
+              location.assign('/');
+            }, 500); //location.reload(true) we can use
+          }
+          ;
+          _context4.next = 11;
+          break;
+        case 8:
+          _context4.prev = 8;
+          _context4.t0 = _context4["catch"](0);
+          (0, _alerts.showAlert)('error', _context4.t0.response.data.message);
+        case 11:
+        case "end":
+          return _context4.stop();
+      }
+    }, _callee4, null, [[0, 8]]);
+  }));
+  return function resetPass(_x4, _x5, _x6) {
+    return _ref4.apply(this, arguments);
   };
 }();
 },{"axios":"../../node_modules/axios/index.js","./alerts":"alerts.js"}],"review.js":[function(require,module,exports) {
@@ -12527,7 +12608,7 @@ var addReview = exports.addReview = /*#__PURE__*/function () {
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', 'Review submit');
             window.setTimeout(function () {
-              location.assign('/my-reviews');
+              location.reload(true);
             }, 1000);
           }
           _context.next = 10;
@@ -12892,6 +12973,7 @@ function _asyncToGenerator(n) { return function () { var t = this, e = arguments
 //Dom element
 var mapbox = document.getElementById('map');
 var loginForm = document.querySelector('.form--login');
+var resetTokenForm = document.querySelector('.form--resetPassword');
 var reviewForm = document.querySelector('.form--review');
 var reviewDelete = document.querySelector('.form--delete');
 
@@ -12907,6 +12989,7 @@ var signUpForm = document.querySelector('.form--signUp');
 var logoutBtn = document.querySelector('.nav__el--logout');
 var updateDataForm = document.querySelector('.form-user-data');
 var updatePassForm = document.querySelector('.form-user-password');
+var forgotPass = document.querySelector('.forgot');
 var bookBtn = document.getElementById('book-tour');
 
 //delegation
@@ -12919,6 +13002,13 @@ if (loginForm) loginForm.addEventListener('submit', function (e) {
   var email = document.getElementById('email').value;
   var password = document.getElementById('password').value;
   (0, _login.login)(email, password);
+});
+if (resetTokenForm) resetTokenForm.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var token = document.getElementById('token').value;
+  var password = document.getElementById('password').value;
+  var passwordConfirm = document.getElementById('passwordConfirm').value;
+  (0, _login.resetPass)(token, password, passwordConfirm);
 });
 if (reviewForm) reviewForm.addEventListener('submit', function (e) {
   e.preventDefault();
@@ -12981,6 +13071,11 @@ if (updatePassForm) updatePassForm.addEventListener('submit', /*#__PURE__*/funct
     return _ref.apply(this, arguments);
   };
 }());
+if (forgotPass) forgotPass.addEventListener('click', function (e) {
+  e.preventDefault();
+  var email = document.getElementById('email').value;
+  (0, _login.forgotPassword)(email);
+});
 if (bookBtn) {
   bookBtn.addEventListener('click', function (e) {
     e.target.textContent = 'Processing...';
@@ -13013,7 +13108,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50005" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49602" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
